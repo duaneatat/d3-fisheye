@@ -1,6 +1,6 @@
 # d3-fisheye
 
-A d3 v4 fisheye plugin that implements a novel smoothing factor to remove the discontinuity at the edge of the radius. See link for more details.
+A d3 v4 fisheye plugin that implements a novel smoothing factor to remove the discontinuity at the edge of the radius. See https://observablehq.com/@duaneatat/smoothed-fisheye for more details.
 
 ## Installing
 
