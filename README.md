@@ -1,15 +1,21 @@
-# d3-foo
+# d3-fisheye
 
-YOUR DESCRIPTION HERE. Replace all instances of `foo` in this file with the name of your new plugin.
+A d3 v4 fisheye plugin that implements a novel smoothing factor to remove the discontinuity at the edge of the radius. See link for more details.
 
 ## Installing
 
-If you use NPM, `npm install d3-foo`. Otherwise, download the [latest release](https://github.com/d3/d3-foo/releases/latest).
+If you use NPM, `npm install d3-fisheye`. Otherwise, download the [latest release](https://github.com/d3/d3-fisheye/releases/latest).
 
 ## API Reference
 
-YOUR API DOCUMENTATION HERE. Use bold for symbols (such as constructor and method names) and italics for instances. See the other D3 modules for examples.
+Example:
 
-<a href="#foo" name="foo">#</a> <b>foo</b>()
-
-Computes the answer to the ultimate question of life, the universe, and everything.
+```
+var fisheye = d3Fisheye.radial()
+  .radius(250)
+  .distortion(4)
+  .smoothingRatio(0.8);
+  
+  fisheye.focus([10, 50]);
+  fisheye([10, 100]); // [10, 138]
+```
