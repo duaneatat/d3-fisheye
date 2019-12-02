@@ -1,0 +1,28 @@
+{
+  "name": "d3-fisheye",
+  "version": "0.0.1",
+  "description": "A fisheye plugin for d3 v4 with smoothing.",
+  "keywords": [
+    "d3",
+    "d3-module"
+  ],
+  "license": "BSD-3-Clause",
+  "main": "build/d3-fisheye.js",
+  "jsnext:main": "index",
+  "homepage": "https://github.com/duaneatat/d3-fisheye",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/duaneatat/d3-fisheye.git"
+  },
+  "scripts": {
+    "pretest": "rm -rf build && mkdir build && rollup -f umd -n d3 -o build/d3-fisheye.js -- index.js",
+    "test": "tape 'test/**/*-test.js'",
+    "prepublish": "npm run test && uglifyjs build/d3-fisheye.js -c -m -o build/d3-fisheye.min.js",
+    "postpublish": "zip -j build/d3-fisheye.zip -- LICENSE README.md build/d3-fisheye.js build/d3-fisheye.min.js"
+  },
+  "devDependencies": {
+    "rollup": "0.27",
+    "tape": "4",
+    "uglify-js": "2"
+  }
+}
