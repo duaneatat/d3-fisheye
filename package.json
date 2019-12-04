@@ -1,6 +1,6 @@
 {
   "name": "d3-fisheye",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "A fisheye plugin for d3 v4 with smoothing.",
   "keywords": [
     "d3",
