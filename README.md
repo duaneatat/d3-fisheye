@@ -9,6 +9,8 @@ A fisheye module that includes the option to smoothly transition out of the fish
 
 ## API Reference
 
+See https://bl.ocks.org/duaneatat/315b00c4747e747054ba0287035794d6 for an example comparing fisheye with and without smoothing enabled.
+
 Example:
 
 ```
