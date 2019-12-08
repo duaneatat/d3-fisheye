@@ -22,7 +22,8 @@
   },
   "devDependencies": {
     "rollup": "0.27",
+    "rollup-plugin-babel": "^4.3.3",
     "tape": "4",
-    "uglify-js": "2"
+    "uglify-es": "^3.3.9"
   }
 }

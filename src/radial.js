@@ -1,72 +1,78 @@
 export default function() {
-  var radius = 200,
-    smoothingRatio = 0,
+  let radius = 200,
+    smoothing = 0.2,
     distortion = 3,
     center = { x: 0, y: 0 },
-    A1,
-    A2,
-    dw;
+    smoothingCoefficient,
+    sarkarCoefficient,
+    distortionCoefficient;
 
   function fisheye(point) {
-    if (smoothingRatio === 1 || distortion === 0) return point;
+    if (smoothing === 1 || distortion === 0) return point;
 
-    var x = point.length ? point[0] : point.x;
-    var y = point.length ? point[1] : point.y;
+    const [x, y] = point;
+    const [centerX, centerY] = center;
 
-    var fx = center.length ? center[0] : center.x;
-    var fy = center.length ? center[1] : center.y;
+    const deltaX = x - centerX;
+    const deltaY = y - centerY;
 
-    var dx = x - fx;
-    var dy = y - fy;
-
-    if (Math.abs(dx) > radius || Math.abs(dy) > radius) {
-      return point;
+    if (Math.abs(deltaX) > radius || Math.abs(deltaY) > radius) {
+      return [...point, 0];
     }
 
-    var dr = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    const distanceFromCenter = Math.sqrt(
+      Math.pow(deltaX, 2) + Math.pow(deltaY, 2)
+    );
 
-    if (Math.abs(dr) > radius || dr == 0) {
-      return point;
+    if (Math.abs(distanceFromCenter) > radius) {
+      return [...point, 0];
     }
 
-    var theta = Math.atan2(dy, dx);
-    var cos = Math.cos(theta);
-    var sin = Math.sin(theta);
+    if (distanceFromCenter === 0) {
+      return [...point, distortion];
+    }
 
-    var rescaled = dr / radius;
-    var newPoint = { x: 0, y: 0 };
-    var newR = fisheyeContinuous(rescaled);
+    const normalizedDistance = distanceFromCenter / radius;
+    const fisheyeDistance = smoothedFisheye(normalizedDistance);
 
-    newPoint.x = fx + cos * radius * newR;
-    newPoint.y = fy + sin * radius * newR;
+    const cos = x / distanceFromCenter;
+    const sin = y / distanceFromCenter;
 
-    return point.length ? [newPoint.x, newPoint.y] : newPoint;
+    return [
+      centerX + cos * radius * fisheyeDistance,
+      centerY + sin * radius * fisheyeDistance,
+      normalizedDistance - fisheyeDistance
+    ];
   }
 
-  function fisheyeContinuous(x) {
-    if (x <= 1 - smoothingRatio) {
-      return (A2 * x * (dw + 1)) / (dw * x + 1);
+  function smoothedFisheye(x) {
+    if (x <= 1 - smoothing) {
+      return (
+        (sarkarCoefficient * x * (distortionCoefficient + 1)) /
+        (distortionCoefficient * x + 1)
+      );
     } else {
-      return (A1 * Math.pow(x - 1, 2)) / 2 + x;
+      return (smoothingCoefficient * Math.pow(x - 1, 2)) / 2 + x;
     }
   }
 
   function recalculate() {
-    var constants = solveForConstants();
-    A1 = constants[0];
-    A2 = constants[1];
-    dw = constants[2];
+    [
+      smoothingCoefficient,
+      sarkarCoefficient,
+      distortionCoefficient
+    ] = solveForConstants();
 
     return fisheye;
   }
 
   function solveForConstants() {
-    if (smoothingRatio === 0 || smoothingRatio === 1) {
+    if (smoothing === 0 || smoothing === 1) {
       return [0, 1, distortion];
     }
-    var xw = 1 - smoothingRatio;
-    var d = distortion;
-    var A1 =
+    const xw = 1 - smoothing;
+    const d = distortion;
+    const smoothingCoefficient =
       (2 *
         xw *
         (d * xw -
@@ -75,7 +81,7 @@ export default function() {
           ) +
           1)) /
       (Math.pow(xw, 3) - 3 * Math.pow(xw, 2) + 3 * xw - 1);
-    var A2 =
+    const sarkarCoefficient =
       (xw *
         (Math.pow(d, 2) * xw +
           d * Math.pow(xw, 2) +
@@ -97,10 +103,10 @@ export default function() {
         Math.pow(xw, 3) +
         Math.pow(xw, 2) -
         2 * xw);
-    var dw =
+    const distortionCoefficient =
       (d * xw + Math.sqrt((d + 1) * (d * Math.pow(xw, 2) + 1)) - 1) /
       (xw * (xw + 1));
-    return [A1, A2, dw];
+    return [smoothingCoefficient, sarkarCoefficient, distortionCoefficient];
   }
 
   fisheye.radius = function(_) {
@@ -109,9 +115,9 @@ export default function() {
     return recalculate();
   };
 
-  fisheye.smoothingRatio = function(_) {
-    if (!arguments.length) return smoothingRatio;
-    smoothingRatio = +_;
+  fisheye.smoothing = function(_) {
+    if (!arguments.length) return smoothing;
+    smoothing = +_;
     return recalculate();
   };
 
@@ -128,12 +134,13 @@ export default function() {
   };
 
   fisheye.focus = fisheye.center;
+  fisheye.smoothingRatio = fisheye.smoothing;
   fisheye.fisheyeRadial = fisheye;
 
   fisheye.fisheyeFunction = function(x) {
     if (x <= 0 || x >= 1) return x;
 
-    return fisheyeContinuous(x);
+    return smoothedFisheye(x);
   };
 
   return recalculate();
