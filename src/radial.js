@@ -8,7 +8,7 @@ export default function() {
     distortionCoefficient;
 
   function fisheye(point) {
-    if (smoothing === 1 || distortion === 0) return point;
+    if (smoothing === 1 || distortion === 0) return [...point, 1];
 
     const [x, y] = point;
     const [centerX, centerY] = center;
@@ -17,7 +17,7 @@ export default function() {
     const deltaY = y - centerY;
 
     if (Math.abs(deltaX) > radius || Math.abs(deltaY) > radius) {
-      return [...point, 0];
+      return [...point, 1];
     }
 
     const distanceFromCenter = Math.sqrt(
@@ -25,23 +25,22 @@ export default function() {
     );
 
     if (Math.abs(distanceFromCenter) > radius) {
-      return [...point, 0];
+      return [...point, 1];
     }
 
-    if (distanceFromCenter === 0) {
+    if (distanceFromCenter == 0) {
       return [...point, distortion];
     }
 
     const normalizedDistance = distanceFromCenter / radius;
     const fisheyeDistance = smoothedFisheye(normalizedDistance);
-
-    const cos = x / distanceFromCenter;
-    const sin = y / distanceFromCenter;
+    const cos = deltaX / distanceFromCenter;
+    const sin = deltaY / distanceFromCenter;
 
     return [
       centerX + cos * radius * fisheyeDistance,
       centerY + sin * radius * fisheyeDistance,
-      normalizedDistance - fisheyeDistance
+      fisheyeDistance / normalizedDistance
     ];
   }
 

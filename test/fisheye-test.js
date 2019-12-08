@@ -67,3 +67,43 @@ tape('d3Fisheye.circular() at focus', test => {
   test.equal(y, 0);
   test.end();
 });
+
+tape('d3Fisheye.circular() with smoothing z value', test => {
+  const fisheye = d3Fisheye
+    .circular()
+    .radius(10)
+    .distortion(2)
+    .smoothing(0.5)
+    .focus([0, 0]);
+  const [, , z] = fisheye([1, 4]);
+
+  test.equal(z.toFixed(2), '1.38');
+  test.end();
+});
+
+tape('d3Fisheye.circular() z value at focus equals distortion', test => {
+  const distortion = 4;
+  const fisheye = d3Fisheye
+    .circular()
+    .radius(10)
+    .distortion(4)
+    .smoothing(0.5)
+    .focus([0, 0]);
+  const [, , z] = fisheye([0, 0]);
+
+  test.equal(z, distortion);
+  test.end();
+});
+
+tape('d3Fisheye.circular() z value beyond radius equals 1', test => {
+  const fisheye = d3Fisheye
+    .circular()
+    .radius(10)
+    .distortion(4)
+    .smoothing(0.5)
+    .focus([0, 0]);
+  const [, , z] = fisheye([20, 20]);
+
+  test.equal(z, 1);
+  test.end();
+});
