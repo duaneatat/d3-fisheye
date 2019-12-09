@@ -2,7 +2,7 @@ export default function() {
   let radius = 200,
     smoothing = 0.2,
     distortion = 3,
-    center = { x: 0, y: 0 },
+    center = [0, 0],
     smoothingCoefficient,
     sarkarCoefficient,
     distortionCoefficient;
