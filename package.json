@@ -1,6 +1,6 @@
 {
   "name": "d3-fisheye",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "An implementation of the fisheye effect with a smooth transition at the edge.",
   "keywords": [
     "d3",
