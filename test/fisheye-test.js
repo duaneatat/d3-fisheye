@@ -117,13 +117,14 @@ tape("d3Fisheye.radial() inverse", (test) => {
     .smoothing(0.31)
     .focus([0, 0]);
 
+  const epsilon = 0.0000001;
   for (let i = 0; i < 1000; i++) {
     const x = Math.random() * 4 * radius - 2 * radius;
     const y = Math.random() * 4 * radius - 2 * radius;
     const [ix, iy] = fisheye(fisheye([x, y]), true);
 
-    test.equal(Math.abs(x - ix) < 1, true);
-    test.equal(Math.abs(y - iy) < 1, true);
+    test.equal(Math.abs(x - ix) < epsilon, true);
+    test.equal(Math.abs(y - iy) < epsilon, true);
   }
   test.end();
 });
