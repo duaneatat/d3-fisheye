@@ -13,7 +13,7 @@ See https://bl.ocks.org/duaneatat/315b00c4747e747054ba0287035794d6 for an exampl
 
 Example:
 
-```
+```javascript
 const fisheye = d3Fisheye.radial()
   .radius(250)
   .distortion(4)
@@ -27,4 +27,18 @@ The values returned correspond to the `x`, `y`, and `z` coordinates of the trans
 
 The `smoothing` option is the fraction of the radius that is used to smoothly transition back out of the fisheye effect. A value of `0` would result in the usual Sarkar-Brown fisheye effect, e.g. [here](https://bost.ocks.org/mike/fisheye/) and [here](https://bl.ocks.org/mbostock/2962761). A value of 1 would result in no fisheye effect at all. Default is 0.2.
 
+#### Inverse
 
+The original point can be recovered by passing `true` as the second parameter to the fisheye function.
+
+Example:
+
+```javascript
+const fisheye = d3Fisheye.radial()
+  .radius(250)
+  .distortion(4)
+  .smoothing(0.5);
+
+fisheye.focus([10, 50]);
+console.log(fisheye(fisheye([10, 100]), true)); // ~[ 10, 100 ]
+```
