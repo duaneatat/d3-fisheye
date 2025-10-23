@@ -17,15 +17,15 @@
   "scripts": {
     "pretest": "rm -rf build && mkdir build && rollup -c -f umd -n d3 -o build/d3-fisheye.js -- index.js",
     "test": "tape 'test/**/*-test.js'",
-    "prepublish": "npm run test && uglifyjs build/d3-fisheye.js -c -m -o build/d3-fisheye.min.js",
+    "prepublish": "npm run test && terser build/d3-fisheye.js -c -m -o build/d3-fisheye.min.js",
     "postpublish": "zip -j build/d3-fisheye.zip -- LICENSE README.md build/d3-fisheye.js build/d3-fisheye.min.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.5",
-    "@babel/preset-env": "^7.7.6",
-    "rollup": "0.27",
-    "rollup-plugin-babel": "^4.3.3",
-    "tape": "4",
-    "uglify-es": "^3.3.9"
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.10",
+    "@rollup/plugin-babel": "^6.0.4",
+    "rollup": "^4.52.5",
+    "tape": "^5.9.0",
+    "terser": "^5.36.0"
   }
 }

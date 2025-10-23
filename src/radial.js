@@ -29,7 +29,7 @@ export default function () {
       return [...point, 1];
     }
 
-    if (distanceFromCenter == 0) {
+    if (distanceFromCenter === 0) {
       return [...point, distortion];
     }
 

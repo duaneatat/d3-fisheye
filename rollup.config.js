@@ -1,10 +1,11 @@
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 
 export default {
   plugins: [
     babel({
       exclude: 'node_modules/**',
-      presets: [['@babel/preset-env']]
+      presets: [['@babel/preset-env']],
+      babelHelpers: 'bundled'
     })
   ]
 };
